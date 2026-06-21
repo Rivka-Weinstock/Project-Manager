@@ -1,3 +1,4 @@
+using Api.Middleware;
 using Api.Profiles;
 using BusinessLogic.Services;
 using BusinessLogic.Services.Interfaces;
@@ -29,6 +30,8 @@ builder.Services.AddScoped<IStatusService, StatusService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
+
+app.UseExceptionHandling();
 
 if (app.Environment.IsDevelopment())
 {
