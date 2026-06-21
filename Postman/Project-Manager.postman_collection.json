@@ -1,0 +1,801 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Project Manager API",
+		"description": "Postman collection for the Project Manager ASP.NET Core Web API.\n\n## Prerequisites\n1. MySQL is running with a valid connection string in `appsettings.Development.json`\n2. Run database migration: `dotnet ef database update --project DataAccess --startup-project Api`\n3. Start the API: `dotnet run --project Api`\n4. Default base URL: `http://localhost:5030`\n\n## Recommended Demo Order\nRun the **Demo Flow** folder top-to-bottom using Collection Runner.\nEach Create request saves its ID to a collection variable for the next steps.\n\n## Entities\n- **Users** – project owners\n- **Projects** – belong to a User\n- **Tasks** – belong to a Project and Status\n- **Statuses** – task states (e.g. To Do, In Progress, Done)\n\n## Expected Status Codes\n| Operation | Success |\n|-----------|--------|\n| GET (list / by id) | 200 |\n| POST (create) | 201 |\n| PUT (update) | 204 |\n| DELETE | 204 |\n| Not found | 404 |\n| Validation / constraint error | 400 |\n| Unhandled server error | 500 |",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5030",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "projectId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "statusId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "taskId",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Demo Flow",
+			"description": "Run this folder in order (Collection Runner) for a full end-to-end demo.",
+			"item": [
+				{
+					"name": "1. Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"const body = pm.response.json();",
+									"pm.collectionVariables.set('userId', body.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"Rivka Weinstock\",\n  \"email\": \"rivka@example.com\"\n}"
+						},
+						"url": "{{baseUrl}}/api/users",
+						"description": "Creates a new user. Saves the returned ID to `userId`."
+					}
+				},
+				{
+					"name": "2. Create Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"const body = pm.response.json();",
+									"pm.collectionVariables.set('statusId', body.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"To Do\"\n}"
+						},
+						"url": "{{baseUrl}}/api/statuses",
+						"description": "Creates a task status. Saves the returned ID to `statusId`."
+					}
+				},
+				{
+					"name": "3. Create Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"const body = pm.response.json();",
+									"pm.collectionVariables.set('projectId', body.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"Final Project\",\n  \"description\": \"C# ASP.NET Core Web API course project\",\n  \"userId\": {{userId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/projects",
+						"description": "Creates a project linked to the user from step 1. Saves the returned ID to `projectId`."
+					}
+				},
+				{
+					"name": "4. Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"const body = pm.response.json();",
+									"pm.collectionVariables.set('taskId', body.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"title\": \"Complete Postman Collection\",\n  \"description\": \"Create and test all API endpoints\",\n  \"dueDate\": \"2026-06-30T00:00:00\",\n  \"statusId\": {{statusId}},\n  \"projectId\": {{projectId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/tasks",
+						"description": "Creates a task linked to the project and status. Saves the returned ID to `taskId`."
+					}
+				},
+				{
+					"name": "5. Get All Tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));",
+									"pm.test('Response is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/tasks",
+						"description": "Verifies the created task appears in the list."
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/users",
+						"description": "Returns all users.\n\n**Expected:** 200 OK"
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/users/{{userId}}",
+						"description": "Returns a single user by route parameter `id`.\n\n**Expected:** 200 OK | 404 Not Found"
+					}
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"if (pm.response.code === 201) {",
+									"    pm.collectionVariables.set('userId', pm.response.json().id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": "{{baseUrl}}/api/users",
+						"description": "Creates a new user from request body.\n\n**Expected:** 201 Created | 400 Bad Request"
+					}
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{userId}},\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john.updated@example.com\"\n}"
+						},
+						"url": "{{baseUrl}}/api/users/{{userId}}",
+						"description": "Updates an existing user. Route `id` must match body `id`.\n\n**Expected:** 204 No Content | 400 Bad Request | 404 Not Found"
+					}
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/users/{{userId}}",
+						"description": "Deletes a user by route parameter `id`.\n\n**Expected:** 204 No Content | 404 Not Found | 400 Bad Request (if user has projects)"
+					}
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/projects",
+						"description": "Returns all projects.\n\n**Expected:** 200 OK"
+					}
+				},
+				{
+					"name": "Get Project by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/projects/{{projectId}}",
+						"description": "Returns a single project by route parameter `id`.\n\n**Expected:** 200 OK | 404 Not Found"
+					}
+				},
+				{
+					"name": "Create Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"if (pm.response.code === 201) {",
+									"    pm.collectionVariables.set('projectId', pm.response.json().id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"Website Redesign\",\n  \"description\": \"Redesign the company website\",\n  \"userId\": {{userId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/projects",
+						"description": "Creates a new project from request body.\n\n**Expected:** 201 Created | 400 Bad Request"
+					}
+				},
+				{
+					"name": "Update Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{projectId}},\n  \"name\": \"Website Redesign v2\",\n  \"description\": \"Updated project scope\",\n  \"userId\": {{userId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/projects/{{projectId}}",
+						"description": "Updates an existing project. Route `id` must match body `id`.\n\n**Expected:** 204 No Content | 400 Bad Request | 404 Not Found"
+					}
+				},
+				{
+					"name": "Delete Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/projects/{{projectId}}",
+						"description": "Deletes a project by route parameter `id`. Cascades to related tasks.\n\n**Expected:** 204 No Content | 404 Not Found"
+					}
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/tasks",
+						"description": "Returns all tasks.\n\n**Expected:** 200 OK"
+					}
+				},
+				{
+					"name": "Get Task by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/tasks/{{taskId}}",
+						"description": "Returns a single task by route parameter `id`.\n\n**Expected:** 200 OK | 404 Not Found"
+					}
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"if (pm.response.code === 201) {",
+									"    pm.collectionVariables.set('taskId', pm.response.json().id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"title\": \"Write unit tests\",\n  \"description\": \"Add tests for service layer\",\n  \"dueDate\": \"2026-07-15T00:00:00\",\n  \"statusId\": {{statusId}},\n  \"projectId\": {{projectId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/tasks",
+						"description": "Creates a new task from request body.\n\n**Expected:** 201 Created | 400 Bad Request"
+					}
+				},
+				{
+					"name": "Update Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{taskId}},\n  \"title\": \"Write unit tests - Done\",\n  \"description\": \"Completed service layer tests\",\n  \"dueDate\": \"2026-07-15T00:00:00\",\n  \"statusId\": {{statusId}},\n  \"projectId\": {{projectId}}\n}"
+						},
+						"url": "{{baseUrl}}/api/tasks/{{taskId}}",
+						"description": "Updates an existing task. Route `id` must match body `id`.\n\n**Expected:** 204 No Content | 400 Bad Request | 404 Not Found"
+					}
+				},
+				{
+					"name": "Delete Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/tasks/{{taskId}}",
+						"description": "Deletes a task by route parameter `id`.\n\n**Expected:** 204 No Content | 404 Not Found"
+					}
+				}
+			]
+		},
+		{
+			"name": "Statuses",
+			"item": [
+				{
+					"name": "Get All Statuses",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/statuses",
+						"description": "Returns all statuses.\n\n**Expected:** 200 OK"
+					}
+				},
+				{
+					"name": "Get Status by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 200 OK', () => pm.response.to.have.status(200));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/statuses/{{statusId}}",
+						"description": "Returns a single status by route parameter `id`.\n\n**Expected:** 200 OK | 404 Not Found"
+					}
+				},
+				{
+					"name": "Create Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 201 Created', () => pm.response.to.have.status(201));",
+									"if (pm.response.code === 201) {",
+									"    pm.collectionVariables.set('statusId', pm.response.json().id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"In Progress\"\n}"
+						},
+						"url": "{{baseUrl}}/api/statuses",
+						"description": "Creates a new status from request body.\n\n**Expected:** 201 Created | 400 Bad Request"
+					}
+				},
+				{
+					"name": "Update Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{statusId}},\n  \"name\": \"Done\"\n}"
+						},
+						"url": "{{baseUrl}}/api/statuses/{{statusId}}",
+						"description": "Updates an existing status. Route `id` must match body `id`.\n\n**Expected:** 204 No Content | 400 Bad Request | 404 Not Found"
+					}
+				},
+				{
+					"name": "Delete Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 204 No Content', () => pm.response.to.have.status(204));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/statuses/{{statusId}}",
+						"description": "Deletes a status by route parameter `id`.\n\n**Expected:** 204 No Content | 404 Not Found | 400 Bad Request (if status has tasks)"
+					}
+				}
+			]
+		},
+		{
+			"name": "Error Handling",
+			"description": "Demonstrates validation, not-found, and database constraint error responses.",
+			"item": [
+				{
+					"name": "404 - User Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 404 Not Found', () => pm.response.to.have.status(404));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/users/99999",
+						"description": "Requests a user that does not exist.\n\n**Expected:** 404 Not Found"
+					}
+				},
+				{
+					"name": "400 - Validation Error (Empty Name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400 Bad Request', () => pm.response.to.have.status(400));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"\",\n  \"email\": \"invalid@example.com\"\n}"
+						},
+						"url": "{{baseUrl}}/api/users",
+						"description": "Sends a create request with an empty name.\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "400 - Route/Body ID Mismatch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400 Bad Request', () => pm.response.to.have.status(400));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 99,\n  \"name\": \"Mismatch Test\",\n  \"email\": \"test@example.com\"\n}"
+						},
+						"url": "{{baseUrl}}/api/users/1",
+						"description": "Route id (1) does not match body id (99).\n\n**Expected:** 400 Bad Request"
+					}
+				},
+				{
+					"name": "400 - DB Constraint (Delete User with Projects)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status is 400 Bad Request', () => pm.response.to.have.status(400));",
+									"pm.test('Error response has message', () => {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('message');",
+									"    pm.expect(body).to.have.property('statusCode', 400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/users/{{userId}}",
+						"description": "Attempts to delete a user that still has projects. Run **Demo Flow** first.\n\n**Expected:** 400 Bad Request (handled by Exception Middleware)"
+					}
+				}
+			]
+		}
+	]
+}

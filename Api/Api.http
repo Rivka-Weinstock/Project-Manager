@@ -1,4 +1,31 @@
 @Api_HostAddress = http://localhost:5030
 
-GET {{Api_HostAddress}}/weatherforecast/
+### Users
+GET {{Api_HostAddress}}/api/users
+Accept: application/json
+
+###
+GET {{Api_HostAddress}}/api/users/1
+Accept: application/json
+
+###
+POST {{Api_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+
+### Projects
+GET {{Api_HostAddress}}/api/projects
+Accept: application/json
+
+### Tasks
+GET {{Api_HostAddress}}/api/tasks
+Accept: application/json
+
+### Statuses
+GET {{Api_HostAddress}}/api/statuses
 Accept: application/json
