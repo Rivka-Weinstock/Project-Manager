@@ -1,4 +1,4 @@
-namespace PM.Models.Entities;
+namespace Models.Entities;
 
 public class Status
 {

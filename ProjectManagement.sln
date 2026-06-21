@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.API", "PM.API\PM.API.csproj", "{CDD9467F-020B-49F2-B1E6-1F52F16DE641}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{CDD9467F-020B-49F2-B1E6-1F52F16DE641}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.BL", "PM.BL\PM.BL.csproj", "{1275E151-4950-4521-A09E-77284FF416BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{1275E151-4950-4521-A09E-77284FF416BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.DAL", "PM.DAL\PM.DAL.csproj", "{27915FE2-4930-4DAB-99A4-442A4F555BC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{27915FE2-4930-4DAB-99A4-442A4F555BC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Models", "PM.Models\PM.Models.csproj", "{E67EE180-ACE8-4ED5-A225-838118C7CCAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{E67EE180-ACE8-4ED5-A225-838118C7CCAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

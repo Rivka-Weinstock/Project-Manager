@@ -1,6 +1,6 @@
-using PM.Models.Entities;
+using Models.Entities;
 
-namespace PM.DAL.Repositories.Interfaces;
+namespace DataAccess.Repositories.Interfaces;
 
 public interface IStatusRepository
 {

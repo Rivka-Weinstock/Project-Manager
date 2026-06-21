@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using PM.DAL.Data;
-using PM.DAL.Repositories.Interfaces;
-using PM.Models.Entities;
+using DataAccess.Data;
+using DataAccess.Repositories.Interfaces;
+using Models.Entities;
 
-namespace PM.DAL.Repositories;
+namespace DataAccess.Repositories;
 
 public class TaskRepository : ITaskRepository
 {

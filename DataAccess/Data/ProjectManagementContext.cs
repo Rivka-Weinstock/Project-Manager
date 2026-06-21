@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PM.Models.Entities;
+using Models.Entities;
 
-namespace PM.DAL.Data;
+namespace DataAccess.Data;
 
 public class ProjectManagementContext : DbContext
 {
