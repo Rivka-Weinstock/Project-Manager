@@ -6,6 +6,9 @@
 # dotenv files
 .env
 
+# Local secrets (MySQL password per developer)
+**/appsettings.Development.json
+
 # User-specific files
 *.rsuser
 *.suo
