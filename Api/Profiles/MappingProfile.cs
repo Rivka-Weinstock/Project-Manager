@@ -1,8 +1,8 @@
 using AutoMapper;
-using PM.Models.DTOs;
-using PM.Models.Entities;
+using Models.DTOs;
+using Models.Entities;
 
-namespace PM.API.Profiles;
+namespace Api.Profiles;
 
 public class MappingProfile : Profile
 {

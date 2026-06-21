@@ -1,4 +1,4 @@
-namespace PM.Models.DTOs;
+namespace Models.DTOs;
 
 public class UserDto
 {
