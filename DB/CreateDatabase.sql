@@ -56,7 +56,7 @@ CREATE TABLE TaskItems (
         ON DELETE RESTRICT
 ) CHARACTER SET utf8mb4;
 
--- Optional seed data for demo / Postman testing
+-- Optional seed data for demo
 INSERT INTO Statuses (Name) VALUES
     ('To Do'),
     ('In Progress'),

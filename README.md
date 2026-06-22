@@ -18,7 +18,6 @@
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
 - [MySQL 8.0](https://dev.mysql.com/downloads/) (מקומי או בענן)
-- (אופציונלי) [Postman](https://www.postman.com/) לבדיקות API
 
 ---
 
@@ -129,20 +128,12 @@ Client → Controller → Service → Repository → DbContext → MySQL
 
 ---
 
-## בדיקות API
+## בדיקות API (Swagger)
 
-### Swagger
-
-בסביבת Development, פתחי: http://localhost:5030/swagger
-
-### Postman
-
-ייבוא הקובץ: `Postman/Project-Manager.postman_collection.json`
-
-ה-Collection כולל:
-- **Demo Flow** — רצף יצירה מלא (User → Project → Task)
-- **CRUD** — לכל ישות
-- **Error Handling** — בדיקות 404, 400, אילוצי FK
+1. הריצי: `dotnet run --project Api`
+2. פתחי: http://localhost:5030/swagger
+3. בחרי endpoint → **Try it out** → **Execute**
+4. קודי סטטוס צפויים: 200 (GET), 201 (POST), 204 (PUT/DELETE), 404 (לא נמצא), 400 (שגיאת קלט)
 
 ---
 
@@ -155,7 +146,6 @@ Project-Manager/
 ├── DataAccess/          # Repositories, DbContext, Migrations
 ├── Models/              # Entities, DTOs
 ├── DB/                  # סקריפט יצירת בסיס הנתונים
-├── Postman/             # Postman collection
 └── ProjectManagement.sln
 ```
 
