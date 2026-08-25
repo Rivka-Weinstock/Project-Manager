@@ -1,6 +1,6 @@
 using Models.Entities;
 
-namespace DataAccess.Repositories.Interfaces;
+namespace BusinessLogic.Repositories.Interfaces;
 
 public interface IStatusRepository
 {

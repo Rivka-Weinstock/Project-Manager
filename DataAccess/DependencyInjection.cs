@@ -1,6 +1,6 @@
+using BusinessLogic.Repositories.Interfaces;
 using DataAccess.Data;
 using DataAccess.Repositories;
-using DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

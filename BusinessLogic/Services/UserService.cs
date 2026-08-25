@@ -1,6 +1,6 @@
 using AutoMapper;
+using BusinessLogic.Repositories.Interfaces;
 using BusinessLogic.Services.Interfaces;
-using DataAccess.Repositories.Interfaces;
 using Models.DTOs;
 using Models.Entities;
 
