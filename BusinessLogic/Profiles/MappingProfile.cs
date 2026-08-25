@@ -2,7 +2,7 @@ using AutoMapper;
 using Models.DTOs;
 using Models.Entities;
 
-namespace Api.Profiles;
+namespace BusinessLogic.Profiles;
 
 public class MappingProfile : Profile
 {
