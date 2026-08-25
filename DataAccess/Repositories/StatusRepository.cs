@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using BusinessLogic.Repositories.Interfaces;
 using DataAccess.Data;
-using DataAccess.Repositories.Interfaces;
 using Models.Entities;
 
 namespace DataAccess.Repositories;

@@ -1,5 +1,3 @@
-using AutoMapper;
-using BusinessLogic.Profiles;
 using BusinessLogic.Services;
 using BusinessLogic.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +12,6 @@ public static class DependencyInjection
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<ITaskService, TaskService>();
         services.AddScoped<IStatusService, StatusService>();
-
-        services.AddAutoMapper(typeof(MappingProfile));
 
         return services;
     }
