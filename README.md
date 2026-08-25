@@ -28,6 +28,7 @@
 ```bash
 git clone https://github.com/Rivka-Weinstock/Project-Manager.git
 cd Project-Manager
+
 ```
 
 ### 2. הגדרת Connection String
