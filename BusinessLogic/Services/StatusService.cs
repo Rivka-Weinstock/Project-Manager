@@ -1,44 +1,41 @@
-using AutoMapper;
+using BusinessLogic.Mapping;
 using BusinessLogic.Repositories.Interfaces;
 using BusinessLogic.Services.Interfaces;
 using Models.DTOs;
-using Models.Entities;
 
 namespace BusinessLogic.Services;
 
 public class StatusService : IStatusService
 {
     private readonly IStatusRepository _statusRepository;
-    private readonly IMapper _mapper;
 
-    public StatusService(IStatusRepository statusRepository, IMapper mapper)
+    public StatusService(IStatusRepository statusRepository)
     {
         _statusRepository = statusRepository;
-        _mapper = mapper;
     }
 
     public async Task<IEnumerable<StatusDto>> GetAllAsync()
     {
         var statuses = await _statusRepository.GetAllAsync();
-        return _mapper.Map<IEnumerable<StatusDto>>(statuses);
+        return statuses.Select(status => status.ToDto());
     }
 
     public async Task<StatusDto?> GetByIdAsync(int id)
     {
         var status = await _statusRepository.GetByIdAsync(id);
-        return status is null ? null : _mapper.Map<StatusDto>(status);
+        return status?.ToDto();
     }
 
     public async Task<StatusDto> AddAsync(StatusDto statusDto)
     {
-        var status = _mapper.Map<Status>(statusDto);
+        var status = statusDto.ToEntity();
         var created = await _statusRepository.AddAsync(status);
-        return _mapper.Map<StatusDto>(created);
+        return created.ToDto();
     }
 
     public async Task UpdateAsync(StatusDto statusDto)
     {
-        var status = _mapper.Map<Status>(statusDto);
+        var status = statusDto.ToEntity();
         await _statusRepository.UpdateAsync(status);
     }
 
