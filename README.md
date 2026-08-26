@@ -1,160 +1,171 @@
-# Project Manager
+הנה קובץ ה-`README.md` המלא והמעודכן, כולל הציון המפורש של שפת **C#** במקום הנכון (גם בפסקה הראשונה וגם בטכנולוגיות). הכל נמצא בתיבת קוד אחת לנוחות העתקה:
 
-מערכת Web API לניהול פרויקטים ומשימות, פותחה כפרויקט סיום לקורס ASP.NET Core.
+# Project Manager Web API
 
-**מאגר GitHub:** https://github.com/Rivka-Weinstock/Project-Manager
-
----
-
-## תיאור המערכת
-
-המערכת מאפשרת ניהול משתמשים, פרויקטים, משימות וסטטוסים. כל משתמש יכול להחזיק במספר פרויקטים, וכל פרויקט מכיל משימות עם סטטוס (למשל: To Do, In Progress, Done).
-
-ה-API מספק פעולות CRUD מלאות על ארבע הישויות, עם מיפוי DTOs, טיפול מרכזי בשגיאות ותיעוד Swagger בסביבת פיתוח.
+A robust Web API built with **C#** and **ASP.NET Core 8** for managing users, projects, tasks, and task statuses. Developed as a capstone project for the ASP.NET Core course.
 
 ---
 
-## דרישות מקדימות
+## Features
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [MySQL 8.0](https://dev.mysql.com/downloads/) (מקומי או בענן)
+- **Full CRUD Operations**: Complete resource management for Users, Projects, Tasks, and Statuses.
+- **Relational Data Mapping**: Object-relational modeling using Entity Framework Core with automatic cascade delete and business constraint validations.
+- **DTO Mapping**: Clean separation of concerns and data transfer object mapping using **AutoMapper**.
+- **Global Error Handling**: Centralized exception management middleware.
+- **Interactive Documentation**: Integrated **Swagger / OpenAPI** support for live endpoint testing in the development environment.
 
 ---
 
-## התקנה והרצה
+## Tech Stack
 
-### 1. שכפול המאגר
+- **Language**: C# 12
+- **Backend**: ASP.NET Core 8 Web API
+- **ORM**: Entity Framework Core 8 with Pomelo MySQL Provider
+- **Mapping**: AutoMapper 12
+- **Documentation**: Swashbuckle (Swagger)
+- **Database**: MySQL 8.0
 
+---
+
+## Prerequisites
+
+Ensure you have the following installed on your local machine:
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (includes C# compiler and runtime)
+- [MySQL 8.0](https://dev.mysql.com/downloads/mysql/) (running locally or accessible via cloud)
+
+---
+
+## Getting Started
+
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/Rivka-Weinstock/Project-Manager.git
+git clone [https://github.com/Rivka-Weinstock/Project-Manager.git](https://github.com/Rivka-Weinstock/Project-Manager.git)
 cd Project-Manager
 
 ```
 
-### 2. הגדרת Connection String
+### 2. Configure the Connection String
 
-ערכי ברירת המחדל נמצאים ב-`Api/appsettings.json`. עדכני את הסיסמה של MySQL:
+Locate `Api/appsettings.json` and update the MySQL connection string with your database credentials under `DefaultConnection`:
 
 ```json
-"DefaultConnection": "Server=localhost;Port=3306;Database=ProjectManagement;User=root;Password=YOUR_PASSWORD;"
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Port=3306;Database=ProjectManagement;User=root;Password=YOUR_PASSWORD;"
+}
+
 ```
 
-> **טיפ:** ניתן ליצור קובץ `Api/appsettings.Development.json` עם הסיסמה האישית שלך. הקובץ אינו נשמר ב-Git.
+> **Tip:** You can create an `Api/appsettings.Development.json` file to store your local credentials securely. (This file is ignored by Git).
 
-### 3. יצירת בסיס הנתונים
+---
 
-בחרי **אחת** משתי הדרכים:
+### 3. Set Up the Database
 
-#### א. סקריפט SQL (מומלץ להגשה)
+Choose **one** of the following methods to initialize your database:
+
+#### Option A: SQL Script (Recommended for submission)
+
+Run the script using the MySQL CLI:
 
 ```bash
 mysql -u root -p < DB/CreateDatabase.sql
+
 ```
 
-או דרך MySQL Workbench: פתיחת `DB/CreateDatabase.sql` והרצה.
+Alternatively, open `DB/CreateDatabase.sql` in **MySQL Workbench** or your preferred database tool and execute it. This script sets up the tables, initial seed/demo data, and EF Core migration history.
 
-הסקריפט יוצר את הטבלאות, נתוני דמו, ורשומת migration עבור EF Core.
+#### Option B: Entity Framework Migrations
 
-#### ב. Entity Framework Migrations
+If you prefer EF Core to build the database from code migrations, run:
 
 ```bash
 dotnet ef database update --project DataAccess --startup-project Api
+
 ```
 
-### 4. הרצת ה-API
+---
+
+### 4. Run the Application
+
+Execute the API project:
 
 ```bash
 dotnet run --project Api
+
 ```
 
-ה-API יעלה בכתובת: **http://localhost:5030**
-
-Swagger (Development): **http://localhost:5030/swagger**
+* **Base API URL:** `http://localhost:5030`
+* **Swagger UI (Development):** `http://localhost:5030/swagger`
 
 ---
 
-## ישויות מרכזיות
+## Architecture & Layering
 
-| ישות | תיאור | שדות עיקריים |
-|------|--------|--------------|
-| **User** | משתמש במערכת | Name, Email |
-| **Project** | פרויקט השייך למשתמש | Name, Description, UserId |
-| **TaskItem** | משימה בתוך פרויקט | Title, Description, DueDate, ProjectId, StatusId |
-| **Status** | סטטוס משימה | Name |
+The project follows a clean **N-Tier Architecture** pattern:
 
-### קשרים בין הישויות
-
-```
-User (1) ──< (N) Project (1) ──< (N) TaskItem (N) >── (1) Status
-```
-
-- משתמש → פרויקטים: **One-to-Many**
-- פרויקט → משימות: **One-to-Many** (מחיקת פרויקט מוחקת את המשימות שלו)
-- סטטוס → משימות: **One-to-Many** (לא ניתן למחוק סטטוס שיש לו משימות)
-
----
-
-## מבנה השכבות
-
-```
-Api              → Controllers, Middleware, Swagger, AutoMapper Profile
-BusinessLogic    → Services (לוגיקה עסקית, מיפוי DTO ↔ Entity)
-DataAccess       → Repositories, DbContext, EF Core Migrations
-Models           → Entities ו-DTOs משותפים
-```
-
-**זרימת בקשה:**
-
-```
-Client → Controller → Service → Repository → DbContext → MySQL
-```
-
-- **Api** — קליטת בקשות HTTP, validation בסיסי, החזרת קודי סטטוס
-- **BusinessLogic** — orchestration ו-AutoMapper
-- **DataAccess** — גישה יחידה למסד הנתונים (Repository Pattern)
-- **Models** — מודלים משותפים ללא תלות בשכבות עליונות
-
----
-
-## Endpoints
-
-| Resource | Base Route |
-|----------|------------|
-| Users | `/api/users` |
-| Projects | `/api/projects` |
-| Tasks | `/api/tasks` |
-| Statuses | `/api/statuses` |
-
-כל resource תומך ב-GET (כל / לפי id), POST, PUT, DELETE.
-
----
-
-## בדיקות API (Swagger)
-
-1. הריצי: `dotnet run --project Api`
-2. פתחי: http://localhost:5030/swagger
-3. בחרי endpoint → **Try it out** → **Execute**
-4. קודי סטטוס צפויים: 200 (GET), 201 (POST), 204 (PUT/DELETE), 404 (לא נמצא), 400 (שגיאת קלט)
-
----
-
-## מבנה תיקיות
-
-```
+```text
 Project-Manager/
-├── Api/                 # Web API
-├── BusinessLogic/       # Services
-├── DataAccess/          # Repositories, DbContext, Migrations
-├── Models/              # Entities, DTOs
-├── DB/                  # סקריפט יצירת בסיס הנתונים
+├── Api/                 # Web API (Controllers, Middleware, Swagger, AutoMapper Profile)
+├── BusinessLogic/       # Services (Business logic implementation, DTO ↔ Entity mapping)
+├── DataAccess/          # Repositories, AppDbContext, EF Core Migrations
+├── Models/              # Shared Domain Entities and DTOs
+├── DB/                  # SQL Database initialization script
 └── ProjectManagement.sln
+
 ```
+
+### Request Flow:
+
+```text
+Client ──> Controller ──> Service ──> Repository ──> DbContext ──> MySQL Database
+
+```
+
+* **Api**: Handles incoming HTTP requests, model validation, and response status codes.
+* **BusinessLogic**: Implements application workflows, orchestration, and AutoMapper configurations.
+* **DataAccess**: Encapsulates database communication using the Repository Pattern.
+* **Models**: Defines shared core entities and DTOs without dependencies on higher layers.
 
 ---
 
-## טכנולוגיות
+## Entity Relationships
 
-- ASP.NET Core 8 Web API
-- Entity Framework Core 8 + Pomelo (MySQL)
-- AutoMapper 12
-- Swashbuckle (Swagger)
+```text
+User (1) ──< (N) Project (1) ──< (N) TaskItem (N) >── (1) Status
+
+```
+
+* **User → Projects**: One-to-Many
+* **Project → Tasks**: One-to-Many (Deleting a project cascades and deletes its tasks)
+* **Status → Tasks**: One-to-Many (Statuses cannot be deleted while assigned tasks exist)
+
+---
+
+## API Endpoints
+
+| Resource | Base Route | Supported Operations |
+| --- | --- | --- |
+| **Users** | `/api/users` | GET (All / By ID), POST, PUT, DELETE |
+| **Projects** | `/api/projects` | GET (All / By ID), POST, PUT, DELETE |
+| **Tasks** | `/api/tasks` | GET (All / By ID), POST, PUT, DELETE |
+| **Statuses** | `/api/statuses` | GET (All / By ID), POST, PUT, DELETE |
+
+---
+
+## API Testing with Swagger
+
+1. Run the project: `dotnet run --project Api`
+2. Open your browser at: `http://localhost:5030/swagger`
+3. Expand any endpoint, click **Try it out**, fill in the required parameters, and click **Execute**.
+
+### Expected HTTP Status Codes:
+
+* `200 OK`: Successful GET request
+* `201 Created`: Successful POST request
+* `204 No Content`: Successful PUT or DELETE update
+* `400 Bad Request`: Input validation error
+* `404 Not Found`: Requested resource does not exist
+
+```
+
+```
